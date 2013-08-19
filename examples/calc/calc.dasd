@@ -1,0 +1,64 @@
+import std.conv;
+import std.stdio;
+
+// DynASM directives.
+|.arch x64
+|.actionlist actions
+
+enum Operation { ADD, SUB, MUL, DIV }
+auto parse_op(string s)
+{
+  switch(s) {
+    case "+": return Operation.ADD;
+    case "-": return Operation.SUB;
+    case "x": return Operation.MUL;
+    case "/": return Operation.DIV;
+    default:
+      assert(0, "Unrecognized operations");
+  }
+}
+
+int main(string[] argv)
+{
+  argv = argv[1..$];
+  if (argv.length < 3 && (argv.length & 1)) {
+    stderr.writeln("Usage: jit1 [<expression-list>]\n");
+    return 1;
+  }
+
+  mixin(DasmDecl("d"));
+  d.init(1);
+  d.setup(actions);
+
+  int init_num = argv[0].to!int;
+  argv = argv[1..$];
+  |  mov rax, init_num
+
+  while(argv.length) {
+    auto op  = argv[0].parse_op;
+    auto num = argv[1].to!int;
+    | mov rbx, num
+    final switch(op) {
+      case Operation.ADD:
+        | add rax, rbx
+        break;
+      case Operation.SUB:
+        | sub rax, rbx
+        break;
+      case Operation.MUL:
+        | mul rbx
+        break;
+      case Operation.DIV:
+        | div rbx
+        break;
+    }
+    argv = argv[2..$];
+  }
+  |  ret
+
+  auto func = d.link_and_encode;
+  printf("%d\n", func());
+
+  d.free;
+  return 0;
+}
