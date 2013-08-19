@@ -1,5 +1,5 @@
 DC = dmd
-DFLAGS = -O
+DFLAGS = -O -release -inline -noboundscheck
 
 CC = gcc
 CFLAGS = -O3

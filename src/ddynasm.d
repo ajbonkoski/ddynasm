@@ -152,6 +152,14 @@ class TopLevelDispatch : LineHandler
   }
 }
 
+string readFirstLine(string fname)
+{
+  auto f = File(fname, "r");
+  foreach(line; f.byLine)
+    return line.idup;
+  return "";
+}
+
 int main(string[] argv)
 {
   auto name = argv[0];
@@ -160,6 +168,8 @@ int main(string[] argv)
     stderr.writeln("ddynasm.d <dasd-file>");
     return -1;
   }
+
+  string first = argv[0].readFirstLine;
 
   // construct some paths
   auto BIN_DIR = name.absolutePath.buildNormalizedPath.dirName;
@@ -172,9 +182,12 @@ int main(string[] argv)
     return -1;
   }
 
+  if(first.startsWith("module ")) first.writeln;
   JitHeaders.writeln;
-  foreach(line; res.output.splitLines)
-    lhStack[$-1].handleLine(line.idup);
+  foreach(line; res.output.splitLines) {
+    if(line.startsWith("module ")) "".writeln;
+    else lhStack[$-1].handleLine(line.idup);
+  }
 
   return 0;
 }
