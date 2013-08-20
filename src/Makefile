@@ -16,7 +16,6 @@ DDYNASM_IMPORT = ../import/ddynasm/dasm_x86.d
 
 ALL = $(DDYNASM) $(DDYNASM_CLIB) $(DDYNASM_IMPORT)
 all: $(ALL)
-	rm -f *.o
 
 $(DDYNASM): $(DDYNASM_OBJ)
 	$(DC) $(DFLAGS) $^ -of$@

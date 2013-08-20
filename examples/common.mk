@@ -8,7 +8,6 @@ DDYNASM = $(ROOT)/bin/ddynasm
 
 ALL = $(BIN)
 all: $(ALL)
-	rm -f $(CLEAN) dasm_x86.o
 
 $(SRC): $(DASD)
 	$(DDYNASM) $^ > $@
