@@ -60,7 +60,7 @@ struct Dasm
   int encode(void *buffer)
   { return dasm_encode(&state, buffer); }
 
-  int function() link_and_encode()
+  int function(void*) link_and_encode()
   {
     assert(mem is null);
     int status = this.link(&this.size);
@@ -74,7 +74,7 @@ struct Dasm
     this.encode(mem);
     int success = mprotect(mem, size, PROT_EXEC | PROT_READ);
     assert(success == 0);
-    return cast(int function())mem;
+    return cast(int function(void*))mem;
   }
 
   /* Get PC label offset. */

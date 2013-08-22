@@ -176,9 +176,11 @@ int main(string[] argv)
   auto SRC_DYNASM_DIR = buildNormalizedPath(BIN_DIR, "../src/dynasm");
 
   auto CMD = "lua %s/dynasm.lua %s".format(SRC_DYNASM_DIR, argv[0]);
+  //CMD.writeln;
   auto res = executeShell(CMD);
   if(res.status != 0) {
     stderr.writeln("error: failed to execute dynasm lua script");
+    stderr.writeln(res.output);
     return -1;
   }
 

@@ -57,7 +57,7 @@ int main(string[] argv)
   |  ret
 
   auto func = d.link_and_encode;
-  printf("%d\n", func());
+  printf("%d\n", func(null));
 
   d.free;
   return 0;

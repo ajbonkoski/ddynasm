@@ -461,7 +461,7 @@ end
 
 -- Put multi-byte opcode with operand-size dependent modifications.
 local function wputop(sz, op, rex)
-  local r
+  local r2
   if rex ~= 0 and not x64 then werror("bad operand size") end
   if sz == "w" then wputb(102) end
   -- Needs >32 bit numbers, but only for crc32 eax, word [ebx]
